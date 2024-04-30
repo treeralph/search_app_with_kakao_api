@@ -22,9 +22,10 @@ fun VideoResponse.toDocument(): Document {
 data class Document(
     val imageUrl: String,
     val titleText: String,
-    val time: LocalDateTime
+    val time: LocalDateTime,
+    val bookmarked: Boolean = false,
 ): Comparable<Document> {
     override fun compareTo(other: Document): Int {
-        return if(time > other.time) 1 else -1
+        return if(time > other.time) -1 else 1
     }
 }

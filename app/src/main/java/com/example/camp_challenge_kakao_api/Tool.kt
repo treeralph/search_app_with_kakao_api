@@ -1,5 +1,9 @@
 package com.example.camp_challenge_kakao_api
 
+import android.graphics.Rect
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.google.gson.internal.bind.util.ISO8601Utils
 import java.time.Instant
 import java.time.LocalDateTime
