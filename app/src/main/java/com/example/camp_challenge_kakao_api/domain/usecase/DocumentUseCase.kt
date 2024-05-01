@@ -1,4 +1,4 @@
-package com.example.camp_challenge_kakao_api.data.usecase
+package com.example.camp_challenge_kakao_api.domain.usecase
 
 import android.util.Log
 import com.example.week_use_kakao_api.data.model.Document

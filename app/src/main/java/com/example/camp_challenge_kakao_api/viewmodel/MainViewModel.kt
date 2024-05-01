@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.camp_challenge_kakao_api.data.usecase.DocumentUseCase
+import com.example.camp_challenge_kakao_api.domain.usecase.DocumentUseCase
 import com.example.week_use_kakao_api.data.model.Document
 import com.example.week_use_kakao_api.data.model.toDocument
 import com.example.week_use_kakao_api.data.repository.SearchRepository
