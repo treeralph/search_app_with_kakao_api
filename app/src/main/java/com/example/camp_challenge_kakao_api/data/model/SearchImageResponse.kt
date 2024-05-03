@@ -54,7 +54,7 @@ data class Meta(
  *             "collection": "news",
  *             "datetime": "2015-12-11T21:13:30.000+09:00",
  *             "display_sitename": "텐아시아",
- *             "doc_url": "http://v.media.daum.net/v/20151211211330856",
+ *             "doc_url": "http://v.media.daum.net/v/20151211211330856",  -> 고유값으로 활용
  *             "height": 640,
  *             "image_url": "http://t1.daumcdn.net/news/201512/11/10asia/20151211211330191kqtg.jpg",
  *             "thumbnail_url": "https://search3.kakaocdn.net/argon/130x130_85_c/Ks9THy0WTjD",
@@ -76,6 +76,6 @@ data class Meta(
  *             "play_time": 5850,
  *             "thumbnail": "https://search1.kakaocdn.net/argon/138x78_80_pr/G08qmPG7UuP",
  *             "title": "코틀린 코루틴 #1 (1~5장)",
- *             "url": "http://www.youtube.com/watch?v=Z4l74GWqXo4"
+ *             "url": "http://www.youtube.com/watch?v=Z4l74GWqXo4" -> 고유값으로 활용
  *         },
  * */

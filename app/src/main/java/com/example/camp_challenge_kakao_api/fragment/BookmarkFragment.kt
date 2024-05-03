@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.example.camp_challenge_kakao_api.R
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.camp_challenge_kakao_api.adapter.BookmarkItemRecyclerViewAdapter
+import com.example.camp_challenge_kakao_api.adapter.SearchItemRecyclerViewAdapter
 import com.example.camp_challenge_kakao_api.databinding.FragmentBookmarkBinding
 import com.example.week_use_kakao_api.viewmodel.MainViewModel
 import com.example.week_use_kakao_api.viewmodel.MainViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * 보관한 이미지는 DB관련 라이브러리 사용 금지.
@@ -26,11 +30,7 @@ class BookmarkFragment : Fragment() {
     }
 
     private val binding by lazy { FragmentBookmarkBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by viewModels { MainViewModelFactory() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val viewModel: MainViewModel by viewModels { MainViewModelFactory(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,5 +39,18 @@ class BookmarkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val adapter = BookmarkItemRecyclerViewAdapter()
+
+        with(binding) {
+            recyclerview.layoutManager = GridLayoutManager(activity, 2)
+            recyclerview.adapter = adapter
+        }
+
+        lifecycleScope.launch {
+            viewModel.bookmarks.collectLatest {
+                adapter.itemUpdate(it.bookmarkList)
+            }
+        }
     }
 }
