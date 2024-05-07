@@ -7,15 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.camp_challenge_kakao_api.R
+import com.example.camp_challenge_kakao_api.adapter.BookmarkRecyclerViewAdapter
 import com.example.camp_challenge_kakao_api.databinding.FragmentBookmarkBinding
 import com.example.week_use_kakao_api.viewmodel.MainViewModel
 import com.example.week_use_kakao_api.viewmodel.MainViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * 보관한 이미지는 DB관련 라이브러리 사용 금지.
  * SharedPreferences 사용 권장
- *      이지만 옛날 문서 같으니 data store 사용해도 좋을 듯 하다.
+ *
  *
  * */
 
@@ -26,11 +31,8 @@ class BookmarkFragment : Fragment() {
     }
 
     private val binding by lazy { FragmentBookmarkBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by viewModels { MainViewModelFactory() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val viewModel: MainViewModel by viewModels { MainViewModelFactory(requireContext()) }
+    private val adapter by lazy { BookmarkRecyclerViewAdapter() } // click listener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,5 +41,16 @@ class BookmarkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with(binding) {
+            recyclerview.layoutManager = GridLayoutManager(activity, 2)
+            recyclerview.adapter = adapter
+        }
+
+        lifecycleScope.launch {
+            viewModel.bookmarks.collectLatest {
+                adapter.itemsUpdate(it.bookmarks)
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 fun ImageResponse.toDocument(): Document {
     return Document(
+        url = doc_url,
         imageUrl = image_url,
         titleText = display_sitename,
         time = stringToLocalDateTime(datetime)
@@ -13,6 +14,7 @@ fun ImageResponse.toDocument(): Document {
 
 fun VideoResponse.toDocument(): Document {
     return Document(
+        url = url,
         imageUrl = thumbnail,
         titleText = title,
         time = stringToLocalDateTime(datetime)
@@ -20,11 +22,13 @@ fun VideoResponse.toDocument(): Document {
 }
 
 data class Document(
+    val url: String,
     val imageUrl: String,
     val titleText: String,
     val time: LocalDateTime,
     val bookmarked: Boolean = false,
 ): Comparable<Document> {
+    constructor(): this("", "", "", LocalDateTime.now())
     override fun compareTo(other: Document): Int {
         return if(time > other.time) -1 else 1
     }

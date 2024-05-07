@@ -19,6 +19,15 @@
     <!-- text style: bold -->
     <!-- text size -->
 
+    <ImageView
+        android:id="@+id/bookmarkButtonImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="@dimen/bookmark_button_padding"
+        android:src="@drawable/ic_bookmark_blank"/>
+
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="match_parent"

@@ -9,28 +9,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.camp_challenge_kakao_api.adapter.ItemOnClickListener
 import com.example.camp_challenge_kakao_api.adapter.ItemRecyclerViewAdapter
 import com.example.camp_challenge_kakao_api.databinding.FragmentSearchBinding
+import com.example.week_use_kakao_api.data.model.Document
 import com.example.week_use_kakao_api.viewmodel.MainViewModel
 import com.example.week_use_kakao_api.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), ItemOnClickListener {
 
     companion object {
         const val TAG = "Search"
     }
 
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by viewModels { MainViewModelFactory() } // SharedViewModel 사용 권장
-    private val adapter = ItemRecyclerViewAdapter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
+    private val viewModel: MainViewModel by viewModels { MainViewModelFactory(requireContext()) } // SharedViewModel 사용 권장
+    private val adapter by lazy { ItemRecyclerViewAdapter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +43,12 @@ class SearchFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.documents.collect {
-                Log.i(TAG, "update collect: $it")
+                adapter.itemsUpdate(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.document.collect {
                 adapter.itemUpdate(it)
             }
         }
@@ -56,5 +56,9 @@ class SearchFragment : Fragment() {
 
     private val buttonOnClickListener: (View) -> Unit = {
         viewModel.search(binding.editText.text.toString())
+    }
+
+    override fun itemOnClick(document: Document) {
+        viewModel.setDocument(document)
     }
 }
