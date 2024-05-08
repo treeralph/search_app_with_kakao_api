@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.camp_challenge_kakao_api.BOOKMARKS_KEY
+import com.example.camp_challenge_kakao_api.FIRST_SEARCH
 import com.example.camp_challenge_kakao_api.URGENT_TAG
 import com.example.camp_challenge_kakao_api.data.local.BookmarkLocalDataSource
 import com.example.camp_challenge_kakao_api.data.model.Bookmark
@@ -46,6 +47,9 @@ class MainViewModel(
 
     private val _document = MutableStateFlow(Document())
     val document = _document.asStateFlow()
+
+    private var currentQuery = ""
+    var currentPage = 1
 
     init {
         viewModelScope.launch {
@@ -86,9 +90,20 @@ class MainViewModel(
         Log.e(URGENT_TAG, "setDocument: num _bookmarks: ${_bookmarks.value.bookmarks.size}", )
     }
 
-    fun search(query: String) {
+    fun search(
+        query: String = currentQuery,
+        page: Int = currentPage,
+        flag: String = FIRST_SEARCH
+    ) {
+        if(query != currentQuery) currentPage = 1
+        currentQuery = query
         viewModelScope.launch(Dispatchers.IO) {
-            documentUseCase.search(query)
+            documentUseCase.search(
+                query = query,
+                page = page,
+                flag = flag
+            )
+            currentPage++
         }
     }
 }

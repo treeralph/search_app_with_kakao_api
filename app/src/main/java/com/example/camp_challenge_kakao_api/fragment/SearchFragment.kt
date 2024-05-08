@@ -10,9 +10,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.camp_challenge_kakao_api.MORE_SEARCH
 import com.example.camp_challenge_kakao_api.adapter.ItemOnClickListener
 import com.example.camp_challenge_kakao_api.adapter.ItemRecyclerViewAdapter
 import com.example.camp_challenge_kakao_api.databinding.FragmentSearchBinding
+import com.example.camp_challenge_kakao_api.domain.usecase.DocumentUseCase
 import com.example.week_use_kakao_api.data.model.Document
 import com.example.week_use_kakao_api.viewmodel.MainViewModel
 import com.example.week_use_kakao_api.viewmodel.MainViewModelFactory
@@ -38,8 +41,23 @@ class SearchFragment : Fragment(), ItemOnClickListener {
 
         with(binding) {
             button.setOnClickListener(buttonOnClickListener)
+            floatingActionButton.setOnClickListener {
+                recyclerView.scrollToPosition(0)
+            }
+
             recyclerView.layoutManager = GridLayoutManager(activity, 2)
             recyclerView.adapter = adapter
+            recyclerView.addOnScrollListener(
+                object: RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        if(!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            Log.e(TAG, "onScrollStateChanged: end arrived", )
+                            viewModel.search(flag = MORE_SEARCH)
+                        }
+                    }
+                }
+            )
         }
 
         lifecycleScope.launch {
@@ -48,6 +66,7 @@ class SearchFragment : Fragment(), ItemOnClickListener {
             }
         }
 
+        // todo: 확인 필요
         lifecycleScope.launch {
             viewModel.document.collect {
                 adapter.itemUpdate(it)
@@ -56,7 +75,7 @@ class SearchFragment : Fragment(), ItemOnClickListener {
     }
 
     private val buttonOnClickListener: (View) -> Unit = {
-        viewModel.search(binding.editText.text.toString())
+        viewModel.search(query = binding.editText.text.toString())
     }
 
     override fun itemOnClick(document: Document) {

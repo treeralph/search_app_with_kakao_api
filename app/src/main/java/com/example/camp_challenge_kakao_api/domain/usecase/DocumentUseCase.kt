@@ -1,6 +1,7 @@
 package com.example.camp_challenge_kakao_api.domain.usecase
 
 import android.util.Log
+import com.example.camp_challenge_kakao_api.FIRST_SEARCH
 import com.example.camp_challenge_kakao_api.data.model.Bookmarks
 import com.example.camp_challenge_kakao_api.data.repository.BookmarkRepository
 import com.example.week_use_kakao_api.data.model.Document
@@ -24,18 +25,28 @@ class DocumentUseCase(
 
     fun editBookmarks(bookmarks: Bookmarks) = bookmarkRepository.edit(bookmarks)
 
-    suspend fun search(query: String) {
+    suspend fun search(
+        query: String,
+        page: Int = 1,
+        flag: String = FIRST_SEARCH
+    ) {
         val temp = mutableListOf<Document>()
         runCatching {
             with(searchRepository) {
-                getSearchImage(query).documents.forEach { imageResponse ->
+                getSearchImage(
+                    query = query,
+                    page = page
+                ).documents.forEach { imageResponse ->
                     temp.add(
                         imageResponse.toDocument(
                             bookmarks.bookmarks.any { it.url == imageResponse.doc_url }
                         )
                     )
                 }
-                getSearchVideo(query).documents.forEach { videoResponse ->
+                getSearchVideo(
+                    query = query,
+                    page = page
+                ).documents.forEach { videoResponse ->
                     temp.add(
                         videoResponse.toDocument(
                             bookmarks.bookmarks.any { it.url == videoResponse.url }
@@ -46,9 +57,17 @@ class DocumentUseCase(
         }.onSuccess {
             Log.i(TAG, "search: onSuccess called")
             temp.sort()
-            _documents.value = temp
+            if(flag == FIRST_SEARCH) {
+                _documents.value = temp
+            } else {
+                val temp2 = _documents.value.toMutableList()
+                temp2.addAll(temp)
+                _documents.value = temp2
+            }
         }.onFailure {
             Log.e(TAG, "search: onFailure: $it")
         }
     }
+
+
 }
