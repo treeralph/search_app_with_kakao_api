@@ -8,7 +8,7 @@ class SearchRepository(
 ) {
     suspend fun getSearchImage(
         query: String,
-        sort: String = "accuracy", // datetime으로 변경 예정
+        sort: String = "accuracy",
         @IntRange(from = 1, to = 50) page: Int = 1,
         @IntRange(from = 1, to = 80) size: Int = 80
     ) = dataSource.getSearchImage(query, sort, page, size)

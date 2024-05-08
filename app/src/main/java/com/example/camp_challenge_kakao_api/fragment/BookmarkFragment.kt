@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -31,7 +32,7 @@ class BookmarkFragment : Fragment() {
     }
 
     private val binding by lazy { FragmentBookmarkBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by viewModels { MainViewModelFactory(requireContext()) }
+    private val viewModel: MainViewModel by activityViewModels { MainViewModelFactory(requireContext()) }
     private val adapter by lazy { BookmarkRecyclerViewAdapter() } // click listener
 
     override fun onCreateView(
@@ -48,7 +49,7 @@ class BookmarkFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            viewModel.bookmarks.collectLatest {
+            viewModel.bookmarks.collect {
                 adapter.itemsUpdate(it.bookmarks)
             }
         }

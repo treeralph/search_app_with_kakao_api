@@ -23,30 +23,15 @@ class BookmarkRepository(
     private val source: BookmarkLocalDataSource,
 ) {
     private val gson = Gson()
-
-    private val _bookmarks = MutableStateFlow(Bookmarks())
-    val bookmarks = _bookmarks.asStateFlow()
-
-    // 바보냐 ?
-
-    // todo: bookmark 추가 안되는 문제 -> job 종료 되는 듯하다.
-    init {
-//        CoroutineScope(Dispatchers.Default).launch {
-//            source.element
-//                .collect { elem ->
-//                    Log.i(URGENT_TAG, ":$elem ")
-//                    _bookmarks.value = gson.fromJson(elem, Bookmarks::class.java)
-//                }
-//        }
-
-        GlobalScope.launch {
-            source.element
-                .collect { elem ->
-                    Log.i(URGENT_TAG, ":$elem ")
-                    _bookmarks.value = gson.fromJson(elem, Bookmarks::class.java)
-                }
-        }
+    fun edit(bookmarks: Bookmarks) {
+        source.edit(
+            gson.toJson(bookmarks)
+        )
     }
 
-    fun edit(bookmarks: Bookmarks) = source.edit(gson.toJson(bookmarks))
+    fun get(): Bookmarks {
+        return gson.fromJson(
+            source.get(), Bookmarks::class.java
+        )
+    }
 }
