@@ -1,22 +1,37 @@
 package com.example.camp_challenge_kakao_api.data.repository
 
-import android.content.Context
-import androidx.datastore.dataStoreFile
-import androidx.datastore.preferences.preferencesDataStore
+import android.util.Log
+import com.example.camp_challenge_kakao_api.URGENT_TAG
 import com.example.camp_challenge_kakao_api.data.local.BookmarkLocalDataSource
-import com.example.week_use_kakao_api.data.model.Document
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import com.example.camp_challenge_kakao_api.data.model.Bookmark
+import com.example.camp_challenge_kakao_api.data.model.Bookmarks
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 
-private val Context.dataStore by preferencesDataStore("")
+/**
+ * 일단 다른 부분은 신경쓰지 말고 작성하자,
+ * */
+@OptIn(DelicateCoroutinesApi::class)
 class BookmarkRepository(
     private val source: BookmarkLocalDataSource,
-    private val context: Context,
 ) {
+    private val gson = Gson()
+    fun edit(bookmarks: Bookmarks) {
+        source.edit(
+            gson.toJson(bookmarks)
+        )
+    }
 
-    val bookmarks: Flow<Unit> = context.dataStore.data.map {
-
+    fun get(): Bookmarks {
+        return gson.fromJson(
+            source.get(), Bookmarks::class.java
+        )
     }
 }

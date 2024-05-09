@@ -1,4 +1,4 @@
-package com.example.week_use_kakao_api.network
+package com.example.camp_challenge_kakao_api.network
 
 import com.example.week_use_kakao_api.data.remote.SearchRemoteDataSource
 import okhttp3.OkHttpClient
