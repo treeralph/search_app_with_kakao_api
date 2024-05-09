@@ -69,7 +69,6 @@ class SearchFragment : Fragment(), DocumentOnClickListener {
 
         lifecycleScope.launch {
             viewModel.document.collect {
-                Log.e(TAG, "onViewCreated: asdf", )
                 adapter.itemUpdate(it)
             }
         }
