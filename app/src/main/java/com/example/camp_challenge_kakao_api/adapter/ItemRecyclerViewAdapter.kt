@@ -1,24 +1,25 @@
 package com.example.camp_challenge_kakao_api.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.camp_challenge_kakao_api.R
 import com.example.camp_challenge_kakao_api.databinding.ItemSearchBinding
-import com.example.week_use_kakao_api.data.model.Document
+import com.example.camp_challenge_kakao_api.data.model.Document
 
 class ItemRecyclerViewAdapter(
-    fragment: Fragment
+    private val fragment: Fragment
 ) : RecyclerView.Adapter<ItemRecyclerViewAdapter.SearchViewHolder>() {
 
     private val itemList = mutableListOf<Document>()
-    private var itemOnClickListener: ItemOnClickListener? = null
+    private var documentOnClickListener: DocumentOnClickListener? = null
 
     init {
-        if(fragment is ItemOnClickListener) {
-            itemOnClickListener = fragment
+        if(fragment is DocumentOnClickListener) {
+            documentOnClickListener = fragment
         }
     }
 
@@ -31,7 +32,10 @@ class ItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val currentItem = itemList[position]
         with(holder.binding) {
-            imageView.load(currentItem.imageUrl) // Image URL
+            //imageView.load(currentItem.imageUrl) // Image URL with Coil
+            Glide.with(fragment).load(currentItem.imageUrl).into(imageView)
+
+
             titleTextView.text = currentItem.titleText
             timeTextView.text = currentItem.time.toString()
             bookmarkButtonImageView.setImageResource(
@@ -39,7 +43,7 @@ class ItemRecyclerViewAdapter(
                 else R.drawable.ic_bookmark_blank
             )
             bookmarkButtonImageView.setOnClickListener {
-                itemOnClickListener?.itemOnClick(currentItem)
+                documentOnClickListener?.documentOnClick(currentItem)
             }
         }
     }
@@ -49,6 +53,7 @@ class ItemRecyclerViewAdapter(
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     fun itemsUpdate(documents: List<Document>) {
         itemList.clear()
         itemList.addAll(documents)
@@ -71,6 +76,6 @@ class ItemRecyclerViewAdapter(
     ): RecyclerView.ViewHolder(binding.root)
 }
 
-interface ItemOnClickListener {
-    fun itemOnClick(document: Document)
+interface DocumentOnClickListener {
+    fun documentOnClick(document: Document)
 }

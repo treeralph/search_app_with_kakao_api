@@ -1,12 +1,7 @@
 package com.example.camp_challenge_kakao_api.data.local
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
 import com.example.camp_challenge_kakao_api.SHARED_PREFERENCES
-import com.example.camp_challenge_kakao_api.URGENT_TAG
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 
 class BookmarkLocalDataSource(

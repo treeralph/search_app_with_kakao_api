@@ -1,12 +1,11 @@
-package com.example.camp_challenge_kakao_api
+package com.example.camp_challenge_kakao_api.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.camp_challenge_kakao_api.adapter.MainViewPagerAdapter
 import com.example.camp_challenge_kakao_api.databinding.ActivitySearchBinding
-import com.example.camp_challenge_kakao_api.fragment.BookmarkFragment
-import com.example.camp_challenge_kakao_api.fragment.SearchFragment
-import com.google.android.material.tabs.TabLayout
+import com.example.camp_challenge_kakao_api.presentation.fragment.BookmarkFragment
+import com.example.camp_challenge_kakao_api.presentation.fragment.SearchFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class SearchActivity : AppCompatActivity() {

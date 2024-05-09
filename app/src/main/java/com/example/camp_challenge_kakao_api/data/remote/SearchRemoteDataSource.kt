@@ -1,7 +1,7 @@
 package com.example.week_use_kakao_api.data.remote
 
-import com.example.week_use_kakao_api.data.model.SearchImageResponse
-import com.example.week_use_kakao_api.data.model.SearchVideoResponse
+import com.example.camp_challenge_kakao_api.data.model.SearchImageResponse
+import com.example.camp_challenge_kakao_api.data.model.SearchVideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -1,4 +1,4 @@
-package com.example.camp_challenge_kakao_api.fragment
+package com.example.camp_challenge_kakao_api.presentation.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,34 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.camp_challenge_kakao_api.R
+import com.example.camp_challenge_kakao_api.adapter.BookmarkOnClickListener
 import com.example.camp_challenge_kakao_api.adapter.BookmarkRecyclerViewAdapter
+import com.example.camp_challenge_kakao_api.data.model.Bookmark
 import com.example.camp_challenge_kakao_api.databinding.FragmentBookmarkBinding
-import com.example.week_use_kakao_api.viewmodel.MainViewModel
-import com.example.week_use_kakao_api.viewmodel.MainViewModelFactory
-import kotlinx.coroutines.flow.collectLatest
+import com.example.camp_challenge_kakao_api.viewmodel.MainViewModel
+import com.example.camp_challenge_kakao_api.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.launch
 
-/**
- * 보관한 이미지는 DB관련 라이브러리 사용 금지.
- * SharedPreferences 사용 권장
- *
- *
- * */
-
-class BookmarkFragment : Fragment() {
+class BookmarkFragment : Fragment(), BookmarkOnClickListener {
 
     companion object {
         const val TAG = "Bookmark"
     }
 
     private val binding by lazy { FragmentBookmarkBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by activityViewModels { MainViewModelFactory(requireContext()) }
-    private val adapter by lazy { BookmarkRecyclerViewAdapter() } // click listener
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(requireContext())
+    }
+    private val adapter by lazy { BookmarkRecyclerViewAdapter(this) } // click listener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,5 +46,9 @@ class BookmarkFragment : Fragment() {
                 adapter.itemsUpdate(it.bookmarks)
             }
         }
+    }
+
+    override fun bookmarkOnClick(bookmark: Bookmark) {
+        viewModel.setBookmark(bookmark)
     }
 }

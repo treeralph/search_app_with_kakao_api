@@ -1,4 +1,4 @@
-package com.example.camp_challenge_kakao_api.fragment
+package com.example.camp_challenge_kakao_api.presentation.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -7,28 +7,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.camp_challenge_kakao_api.MORE_SEARCH
-import com.example.camp_challenge_kakao_api.adapter.ItemOnClickListener
+import com.example.camp_challenge_kakao_api.adapter.DocumentOnClickListener
 import com.example.camp_challenge_kakao_api.adapter.ItemRecyclerViewAdapter
 import com.example.camp_challenge_kakao_api.databinding.FragmentSearchBinding
-import com.example.camp_challenge_kakao_api.domain.usecase.DocumentUseCase
-import com.example.week_use_kakao_api.data.model.Document
-import com.example.week_use_kakao_api.viewmodel.MainViewModel
-import com.example.week_use_kakao_api.viewmodel.MainViewModelFactory
+import com.example.camp_challenge_kakao_api.data.model.Document
+import com.example.camp_challenge_kakao_api.viewmodel.MainViewModel
+import com.example.camp_challenge_kakao_api.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment(), ItemOnClickListener {
+class SearchFragment : Fragment(), DocumentOnClickListener {
 
     companion object {
         const val TAG = "Search"
     }
 
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by activityViewModels { MainViewModelFactory(requireContext()) } // SharedViewModel 사용 권장
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(requireContext())
+    }
     private val adapter by lazy { ItemRecyclerViewAdapter(this) }
 
     override fun onCreateView(
@@ -51,8 +51,9 @@ class SearchFragment : Fragment(), ItemOnClickListener {
                 object: RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
-                        if(!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                            Log.e(TAG, "onScrollStateChanged: end arrived", )
+                        if(!recyclerView.canScrollVertically(1)
+                            && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            Log.e(TAG, "onScrollStateChanged: end arrived")
                             viewModel.search(flag = MORE_SEARCH)
                         }
                     }
@@ -66,9 +67,9 @@ class SearchFragment : Fragment(), ItemOnClickListener {
             }
         }
 
-        // todo: 확인 필요
         lifecycleScope.launch {
             viewModel.document.collect {
+                Log.e(TAG, "onViewCreated: asdf", )
                 adapter.itemUpdate(it)
             }
         }
@@ -78,7 +79,7 @@ class SearchFragment : Fragment(), ItemOnClickListener {
         viewModel.search(query = binding.editText.text.toString())
     }
 
-    override fun itemOnClick(document: Document) {
+    override fun documentOnClick(document: Document) {
         viewModel.setDocument(document)
     }
 }

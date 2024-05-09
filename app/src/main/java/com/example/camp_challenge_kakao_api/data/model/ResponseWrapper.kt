@@ -1,4 +1,4 @@
-package com.example.week_use_kakao_api.data.model
+package com.example.camp_challenge_kakao_api.data.model
 
 import com.example.camp_challenge_kakao_api.stringToLocalDateTime
 import java.time.LocalDateTime

@@ -4,9 +4,9 @@ import android.util.Log
 import com.example.camp_challenge_kakao_api.FIRST_SEARCH
 import com.example.camp_challenge_kakao_api.data.model.Bookmarks
 import com.example.camp_challenge_kakao_api.data.repository.BookmarkRepository
-import com.example.week_use_kakao_api.data.model.Document
-import com.example.week_use_kakao_api.data.model.toDocument
-import com.example.week_use_kakao_api.data.repository.SearchRepository
+import com.example.camp_challenge_kakao_api.data.model.Document
+import com.example.camp_challenge_kakao_api.data.model.toDocument
+import com.example.camp_challenge_kakao_api.data.repository.SearchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -55,7 +55,6 @@ class DocumentUseCase(
                 }
             }
         }.onSuccess {
-            Log.i(TAG, "search: onSuccess called")
             temp.sort()
             if(flag == FIRST_SEARCH) {
                 _documents.value = temp
